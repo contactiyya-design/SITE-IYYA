@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{ --navy:#1b2433; --ink:#2a3040; --gold:#b08d1e; --muted:#6d7482; --bg:#ffffff; --bg2:#f6f5f2; --line:#e5e2da; }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Jost',sans-serif;color:var(--ink);background:var(--bg);font-weight:300;line-height:1.7}
+h1,h2,h3,.serif{font-family:'Cormorant Garamond',serif;font-weight:500;color:var(--navy)}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);border-bottom:1px solid var(--line);backdrop-filter:blur(6px)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:78px}
+.logo{display:flex;align-items:center;gap:14px}
+.logo svg{height:44px;width:auto}
+.logo .name{font-family:'Jost',sans-serif;font-weight:400;letter-spacing:5px;font-size:15px;color:var(--navy)}
+.logo .name small{display:block;font-size:9px;letter-spacing:3px;color:var(--gold)}
+nav.menu{display:flex;gap:18px}
+nav.menu > div{position:relative}
+nav.menu a{font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:var(--ink);padding:6px 0;border-bottom:1px solid transparent;transition:.25s;display:inline-block;white-space:nowrap}
+nav.menu a:hover{border-color:var(--gold);color:var(--navy)}
+nav.menu .top{display:flex;align-items:center;gap:6px;cursor:pointer;height:78px}
+nav.menu .car{font-size:9px;color:var(--gold)}
+.sub{position:absolute;top:78px;left:-18px;min-width:280px;background:#fff;border:1px solid var(--line);box-shadow:0 22px 44px rgba(20,30,50,.12);padding:8px 0;opacity:0;visibility:hidden;transform:translateY(8px);transition:.25s;display:flex;flex-direction:column}
+nav.menu > div:hover .sub{opacity:1;visibility:visible;transform:translateY(0)}
+.sub a{display:block;width:100%;padding:12px 24px;font-size:11.5px;letter-spacing:2px;border-bottom:1px solid var(--bg2);white-space:nowrap}
+.sub a:last-child{border-bottom:none}
+.sub a:hover{background:var(--bg2);color:var(--gold);padding-left:30px}
+.burger{display:none;font-size:24px;background:none;border:none;color:var(--navy);cursor:pointer}
+.mmenu{display:none;background:#fff;border-top:1px solid var(--line);padding:12px 24px 20px}
+.mmenu.open{display:block}
+.mmenu a{display:block;padding:10px 0;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--ink);border-bottom:1px solid var(--line)}
+.mmenu .msub{padding-left:18px;font-size:12px;color:var(--muted)}
+@media(max-width:1080px){nav.menu{display:none}.burger{display:block}}
+.film{position:relative;width:100%;height:calc(100vh - 78px);min-height:540px;background:#000;overflow:hidden;font-family:'Jost',sans-serif;color:#ece5d8}
+@keyframes bob { 0%,100% { transform: translateY(0); opacity: .45; } 50% { transform: translateY(8px); opacity: 1; } }
+@keyframes pulseRing { 0% { box-shadow: 0 0 0 0 rgba(200,162,74,0.45);} 70%{ box-shadow: 0 0 0 22px rgba(200,162,74,0);} 100%{ box-shadow:0 0 0 0 rgba(200,162,74,0);} }
+input[type=range].iyya-scrub { -webkit-appearance:none; appearance:none; height:3px; background:transparent; cursor:pointer; }
+input[type=range].iyya-scrub::-webkit-slider-thumb { -webkit-appearance:none; width:12px; height:12px; border-radius:50%; background:#c8a24a; margin-top:-1px; }
+input[type=range].iyya-scrub::-moz-range-thumb { width:12px; height:12px; border:none; border-radius:50%; background:#c8a24a; }
+.search{background:#fff;border:1px solid var(--line);box-shadow:0 18px 40px rgba(20,30,50,.08);max-width:980px;margin:-52px auto 0;position:relative;z-index:6;display:grid;grid-template-columns:1fr 1fr 1fr auto}
+.search .cell{padding:20px 24px;border-right:1px solid var(--line)}
+.search label{display:block;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.search select,.search input{width:100%;border:none;outline:none;font-family:'Jost',sans-serif;font-size:15px;color:var(--navy);background:transparent}
+.search .go{display:flex;align-items:center;padding:0 12px}
+@media(max-width:820px){.search{grid-template-columns:1fr;margin:-30px 16px 0}.search .cell{border-right:none;border-bottom:1px solid var(--line)}}
+section{padding:84px 0}
+.sec-head{text-align:center;margin-bottom:52px}
+.sec-head .over{letter-spacing:5px;font-size:11.5px;text-transform:uppercase;color:var(--gold)}
+.sec-head h2{font-size:clamp(28px,3.6vw,40px);margin-top:10px}
+.sec-head p{max-width:640px;margin:14px auto 0;color:var(--muted)}
+.btn{display:inline-block;padding:14px 34px;font-size:12.5px;letter-spacing:2.5px;text-transform:uppercase;transition:.25s;cursor:pointer;border:none;font-family:'Jost',sans-serif}
+.btn-gold{background:var(--gold);color:#fff}
+.btn-gold:hover{background:#96771a}
+.btn-ghost{border:1px solid #fff;color:#fff;background:transparent}
+.btn-ghost:hover{background:#fff;color:var(--navy)}
+.btn-navy{background:var(--navy);color:#fff}
+.btn-navy:hover{background:#111a29}
+.props{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+@media(max-width:920px){.props{grid-template-columns:1fr}}
+.card{border:1px solid var(--line);background:#fff;transition:.3s}
+.card:hover{box-shadow:0 20px 46px rgba(20,30,50,.10);transform:translateY(-4px)}
+.card .ph{position:relative;aspect-ratio:1/1;overflow:hidden}
+.card .ph img{width:100%;height:100%;object-fit:cover;transition:.6s}
+.card:hover .ph img{transform:scale(1.05)}
+.card .tag{position:absolute;top:16px;left:16px;background:var(--navy);color:#fff;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;padding:6px 12px}
+.card .body{padding:22px 24px 26px}
+.card h3{font-size:22px}
+.card .loc{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin:4px 0 10px}
+.card .specs{display:flex;gap:18px;font-size:13.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;margin-top:14px;flex-wrap:wrap}
+.card .specs span{display:flex;align-items:center;gap:7px}
+.card .specs svg{width:17px;height:17px;stroke:currentColor;stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.card .price{font-size:19px;color:var(--navy);font-weight:400;font-family:'Cormorant Garamond',serif}
+.biens-toolbar{display:flex;flex-wrap:wrap;gap:16px;justify-content:flex-end;align-items:flex-end;margin-bottom:36px}
+.biens-toolbar .fld{display:flex;flex-direction:column;gap:6px;min-width:200px}
+.biens-toolbar label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.biens-toolbar select{border:1px solid var(--line);background:#fff;padding:12px 14px;font-family:'Jost',sans-serif;font-size:14px;color:var(--navy);outline:none;cursor:pointer;border-radius:0}
+.biens-toolbar select:focus{border-color:var(--gold)}
+.biens-empty{text-align:center;color:var(--muted);padding:50px 0;font-size:15px;font-style:italic}
+@media(max-width:820px){.biens-toolbar{justify-content:stretch}.biens-toolbar .fld{flex:1 1 160px;min-width:140px}}
+.modal{position:fixed;inset:0;z-index:100;background:rgba(15,20,30,.55);display:none;align-items:center;justify-content:center;padding:20px}
+.modal.open{display:flex}
+.mbox{background:#fff;max-width:560px;width:100%;max-height:90vh;overflow:auto;padding:38px 40px}
+.mbox h3{font-size:26px;margin-bottom:4px}
+.mbox .msub2{font-size:13px;color:var(--muted);margin-bottom:22px}
+.mbox label{display:block;font-size:10.5px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:14px 0 5px}
+.mbox select,.mbox input,.mbox textarea{width:100%;border:1px solid var(--line);padding:11px 14px;font-family:'Jost',sans-serif;font-size:14.5px;color:var(--navy);outline:none;background:#fff}
+.mbox select:focus,.mbox input:focus,.mbox textarea:focus{border-color:var(--gold)}
+.mrow{display:flex;gap:14px}
+.mrow > div{flex:1}
+.mclose{float:right;font-size:22px;color:var(--muted);cursor:pointer;background:none;border:none}
+.mbox .btn{width:100%;margin-top:22px}
+.gray{background:var(--bg2)}
+.serv{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+@media(max-width:920px){.serv{grid-template-columns:1fr}}
+.sv{background:#fff;border:1px solid var(--line);padding:34px 30px}
+.sv .n{font-family:'Cormorant Garamond',serif;font-size:34px;color:var(--gold);line-height:1}
+.sv h3{font-size:21px;margin:12px 0 8px}
+.sv p{font-size:14.5px;color:var(--muted)}
+.band{background:var(--navy);color:#fff;padding:90px 0}
+.band .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:60px;align-items:center}
+@media(max-width:880px){.band .grid{grid-template-columns:1fr}}
+.band .over{letter-spacing:5px;font-size:11.5px;text-transform:uppercase;color:#e9d9a8}
+.band h2{color:#fff;font-size:clamp(28px,3.4vw,38px);margin:12px 0 18px}
+.band p{color:#c9cfda;margin-bottom:14px}
+.band .ph{height:420px;overflow:hidden}
+.band .ph img{width:100%;height:100%;object-fit:cover}
+.about{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+@media(max-width:880px){.about{grid-template-columns:1fr}}
+.about .ph{height:460px;overflow:hidden}
+.about .ph img{width:100%;height:100%;object-fit:cover}
+.about h2{font-size:clamp(28px,3.4vw,38px);margin-bottom:18px}
+.about p{color:var(--muted);margin-bottom:14px}
+.values{display:flex;gap:30px;margin-top:22px;flex-wrap:wrap}
+.values div{border-top:2px solid var(--gold);padding-top:10px;font-size:13px;letter-spacing:1.5px;text-transform:uppercase;color:var(--navy)}
+footer{background:#141b28;color:#aeb6c4;padding:70px 0 30px;font-size:14px}
+.fgrid{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:50px}
+@media(max-width:820px){.fgrid{grid-template-columns:1fr}}
+footer h4{color:#fff;font-family:'Jost',sans-serif;font-weight:400;letter-spacing:3px;text-transform:uppercase;font-size:13px;margin-bottom:18px}
+footer a:hover{color:#e9d9a8}
+footer .flogo svg{height:52px;margin-bottom:14px}
+.fbottom{border-top:1px solid #2a3345;margin-top:50px;padding-top:22px;text-align:center;font-size:12px;color:#7d8595}
+.wa{position:fixed;bottom:26px;right:26px;z-index:60;background:#25d366;color:#fff;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 10px 26px rgba(0,0,0,.25)}
+#google_translate_element{display:inline-flex;align-items:center}
+#google_translate_element .goog-te-gadget{font-family:'Jost',sans-serif !important}
+#google_translate_element .goog-te-gadget-simple{border:1px solid var(--line);border-radius:0;padding:5px 9px;font-family:'Jost',sans-serif;font-size:11px !important;background:#fff;display:inline-flex;align-items:center;line-height:1;white-space:nowrap}
+#google_translate_element .goog-te-gadget-simple .goog-te-menu-value{color:var(--navy) !important;font-size:11px !important}
+#google_translate_element .goog-te-gadget-simple .goog-te-menu-value span{color:var(--navy) !important}
+#google_translate_element .goog-te-gadget-icon{display:none !important}
+#google_translate_element img{display:none !important}
+.goog-te-banner-frame{display:none !important}
+.goog-text-highlight{background:none !important;box-shadow:none !important}
+body{top:0 !important}
+body > .skiptranslate{display:none !important}
+</style>
+<script>
+window.__langNames = {en:'Anglais', es:'Espagnol', ru:'Russe', 'zh-CN':'Chinois (simplifi\u00e9)'};
+window.__applyLang = function(lang){
+  if(!lang || lang === 'fr') return;
+  var opener = document.querySelector('#google_translate_element a[aria-haspopup="true"]');
+  if(!opener){ return; }
+  opener.click();
+  var tries = 0;
+  var findFrame = function(){
+    var frame = document.querySelector('iframe.VIpgJd-ZVi9od-xl07Ob-OEVmcd');
+    var target = null;
+    if(frame){
+      try{
+        var links = frame.contentDocument.querySelectorAll('a');
+        for(var i=0;i<links.length;i++){
+          if(links[i].textContent.indexOf(window.__langNames[lang]) !== -1){ target = links[i]; break; }
+        }
+      }catch(e){}
+    }
+    if(target){ target.click(); return; }
+    if(tries < 20){ tries++; setTimeout(findFrame, 150); }
+  };
+  setTimeout(findFrame, 150);
+};
+window.setSiteLang = function(ev){
+  var lang = ev.currentTarget.getAttribute('data-lang');
+  try{ localStorage.setItem('iyya_site_lang', lang); }catch(e){}
+  if(lang === 'fr'){ window.location.reload(); return; }
+  window.__applyLang(lang);
+};
+window.googleTranslateElementInit = function(){
+  if(window.__gte_inited) return; window.__gte_inited = true;
+  new google.translate.TranslateElement({pageLanguage:'fr', includedLanguages:'en,es,ru,zh-CN', layout: google.translate.TranslateElement.InlineLayout.SIMPLE, autoDisplay:true}, 'google_translate_element');
+  var saved;
+  try{ saved = localStorage.getItem('iyya_site_lang'); }catch(e){}
+  if(saved && saved !== 'fr'){ setTimeout(function(){ window.__applyLang(saved); }, 700); }
+};
+</script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</helmet>
+
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="#top">
+      <svg viewBox="50 5 295 175" xmlns="http://www.w3.org/2000/svg"><g stroke="#1b2433" stroke-width="7" fill="none">
+      <line x1="64" y1="90" x2="64" y2="170"></line><line x1="72" y1="18" x2="118" y2="90"></line><line x1="118" y1="90" x2="169" y2="18"></line>
+      <line x1="118" y1="90" x2="118" y2="164"></line><line x1="115" y1="164" x2="172" y2="164"></line><line x1="169" y1="18" x2="212" y2="90"></line>
+      <line x1="212" y1="90" x2="267" y2="18"></line><line x1="212" y1="90" x2="172" y2="164"></line><line x1="274" y1="90" x2="222" y2="170"></line>
+      <line x1="274" y1="90" x2="327" y2="170"></line><line x1="218" y1="170" x2="331" y2="170"></line></g></svg>
+      <span class="name">IYYA<small>PATRIMOINE</small></span>
+    </a>
+    <nav class="menu">
+      <div><span class="top"><a href="Nos biens.dc.html">Nos biens</a><span class="car">▼</span></span>
+        <div class="sub"><a href="Nos biens.dc.html">Ancien</a><a href="Nos biens.dc.html">Neuf</a></div>
+      </div>
+      <div><span class="top"><a href="#services">Nos univers</a><span class="car">▼</span></span>
+        <div class="sub">
+          <a href="Chasseur de biens.dc.html">Chasseur de biens immobiliers</a>
+          <a href="Location.dc.html">Location</a>
+          <a href="Administration des biens.dc.html#docs">Contrat de location</a>
+          <a href="Location.dc.html#saisonniere">Location saisonnière · Abidjan</a>
+          <a href="Gestion locative.dc.html">Gestion locative</a>
+          <a href="Administration des biens.dc.html#docs">Mandat de gestion locative</a>
+          <a href="Facility management.dc.html">Facility management</a>
+          <a href="Property management.dc.html">Property management</a>
+          <a href="Renovation.dc.html">Rénovation — Architecture intérieure</a>
+          <a href="Back office.dc.html">Gestion administrative &amp; juridique</a>
+          <a href="Fonciere.dc.html">Notre Foncière</a>
+          <a href="Histoire.dc.html">Histoire de la société</a>
+        </div>
+      </div>
+      <div><span class="top"><a href="Equipe.dc.html">Équipe</a><span class="car">▼</span></span>
+        <div class="sub"><a href="Equipe.dc.html">L'équipe</a><a href="Nous rejoindre.dc.html">Nous rejoindre</a></div>
+      </div>
+      <div><a class="top" href="Actualites.dc.html" style="height:78px">Actualités</a></div>
+      <div><a class="top" href="#contact" style="height:78px">Contact</a></div>
+    </nav>
+    <button class="burger" aria-label="Menu" onclick="{{ toggleMenu }}">☰</button>
+    <div style="display:flex;gap:8px;margin-left:10px;font-size:11px;letter-spacing:1px">
+      <div id="google_translate_element" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);left:-9999px"></div>
+      <button type="button" onclick="{{ setLangFn }}" data-lang="en" style="border:1px solid var(--line);padding:5px 9px;color:var(--navy);background:#fff;cursor:pointer;font:inherit;font-size:11px;letter-spacing:1px">EN</button>
+      <button type="button" onclick="{{ setLangFn }}" data-lang="es" style="border:1px solid var(--line);padding:5px 9px;color:var(--navy);background:#fff;cursor:pointer;font:inherit;font-size:11px;letter-spacing:1px">ES</button>
+      <button type="button" onclick="{{ setLangFn }}" data-lang="ru" style="border:1px solid var(--line);padding:5px 9px;color:var(--navy);background:#fff;cursor:pointer;font:inherit;font-size:11px;letter-spacing:1px">RU</button>
+      <button type="button" onclick="{{ setLangFn }}" data-lang="zh-CN" style="border:1px solid var(--line);padding:5px 9px;color:var(--navy);background:#fff;cursor:pointer;font:inherit;font-size:11px;letter-spacing:1px">中文</button>
+      <button type="button" onclick="{{ setLangFn }}" data-lang="fr" style="border:1px solid var(--gold,#b8935a);padding:5px 9px;color:var(--navy);background:#fff;cursor:pointer;font:inherit;font-size:11px;letter-spacing:1px">FR</button>
+    </div>
+  </div>
+  <div class="mmenu {{ mmenuCls }}">
+    <a href="Nos biens.dc.html">Nos biens</a>
+    <a class="msub" href="Nos biens.dc.html">Ancien</a>
+    <a class="msub" href="Nos biens.dc.html">Neuf</a>
+    <a href="#services">Nos univers</a>
+    <a class="msub" href="Chasseur de biens.dc.html">Chasseur de biens immobiliers</a>
+    <a class="msub" href="Location.dc.html">Location</a>
+    <a class="msub" href="Administration des biens.dc.html#docs">Contrat de location</a>
+    <a class="msub" href="Location.dc.html#saisonniere">Location saisonnière · Abidjan</a>
+    <a class="msub" href="Gestion locative.dc.html">Gestion locative</a>
+    <a class="msub" href="Administration des biens.dc.html#docs">Mandat de gestion locative</a>
+    <a class="msub" href="Facility management.dc.html">Facility management</a>
+    <a class="msub" href="Property management.dc.html">Property management</a>
+    <a class="msub" href="Renovation.dc.html">Rénovation — Architecture intérieure</a>
+    <a class="msub" href="Back office.dc.html">Gestion administrative &amp; juridique</a>
+    <a class="msub" href="Fonciere.dc.html">Notre Foncière</a>
+    <a class="msub" href="Histoire.dc.html">Histoire de la société</a>
+    <a href="Equipe.dc.html">Équipe</a>
+    <a class="msub" href="Equipe.dc.html">L'équipe</a>
+    <a class="msub" href="Nous rejoindre.dc.html">Nous rejoindre</a>
+    <a href="Actualites.dc.html">Actualités</a>
+    <a href="#contact">Contact</a>
+  </div>
+</header>
+
+<div id="top"></div>
+
+<!-- ============ FILM D'ACCUEIL (hero) ============ -->
+<div class="film" data-screen-label="Film — Accueil" ref="{{ bindRoot }}">
+  <div data-shot="" style="position:absolute; inset:0; opacity:0; overflow:hidden;">
+    <video data-kb="" muted="" loop="" playsinline="" preload="auto" style="width:100%; height:100%; object-fit:cover; transform-origin:center;">
+      <source src="assets/drone-aerial.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div data-shot="" style="position:absolute; inset:0; opacity:0; overflow:hidden;"><img data-kb="" src="assets/01-arrivee.jpg" style="width:100%;height:100%;object-fit:cover;transform-origin:center;"></div>
+  <div data-shot="" style="position:absolute; inset:0; opacity:0; overflow:hidden;"><img data-kb="" src="assets/02-villa-jour.jpg" style="width:100%;height:100%;object-fit:cover;transform-origin:center;"></div>
+  <div data-shot="" style="position:absolute; inset:0; opacity:0; overflow:hidden;"><img data-kb="" src="assets/03-retrouvailles.jpg" style="width:100%;height:100%;object-fit:cover;transform-origin:center;"></div>
+  <div data-shot="" style="position:absolute; inset:0; opacity:0; overflow:hidden;"><img data-kb="" src="assets/04-salon-jour.jpg" style="width:100%;height:100%;object-fit:cover;transform-origin:center;"></div>
+  <div data-shot="" style="position:absolute; inset:0; opacity:0; overflow:hidden;"><img data-kb="" src="assets/05-salon-detente.jpg" style="width:100%;height:100%;object-fit:cover;transform-origin:center;"></div>
+  <div data-shot="" style="position:absolute; inset:0; opacity:0; overflow:hidden;"><img data-kb="" src="assets/06-piscine-jour.jpg" style="width:100%;height:100%;object-fit:cover;transform-origin:center;"></div>
+  <div data-shot="" style="position:absolute; inset:0; opacity:0; overflow:hidden;"><img data-kb="" src="assets/07-dejeuner.jpg" style="width:100%;height:100%;object-fit:cover;transform-origin:center;"></div>
+  <div data-shot="" style="position:absolute; inset:0; opacity:0; overflow:hidden;"><img data-kb="" src="assets/08-complicite.jpg" style="width:100%;height:100%;object-fit:cover;transform-origin:center;"></div>
+  <div data-shot="" style="position:absolute; inset:0; opacity:0; overflow:hidden;"><img data-kb="" src="assets/09-chambre-crepuscule.jpg" style="width:100%;height:100%;object-fit:cover;transform-origin:center;"></div>
+  <div data-shot="" style="position:absolute; inset:0; opacity:0; overflow:hidden;"><img data-kb="" src="assets/10-soir-lanternes.jpg" style="width:100%;height:100%;object-fit:cover;transform-origin:center;"></div>
+  <div data-shot="" style="position:absolute; inset:0; opacity:0; overflow:hidden;"><img data-kb="" src="assets/02-villa-jour.jpg" style="width:100%;height:100%;object-fit:cover;transform-origin:center;"></div>
+
+  <div style="position:absolute; inset:0; pointer-events:none; background: radial-gradient(120% 120% at 50% 42%, rgba(0,0,0,0) 52%, rgba(0,0,0,0.5) 100%); z-index:2;"></div>
+  <div style="position:absolute; inset:0; pointer-events:none; background: linear-gradient(180deg, rgba(0,0,0,0.28) 0%, rgba(0,0,0,0) 22%, rgba(0,0,0,0) 60%, rgba(0,0,0,0.72) 100%); z-index:2;"></div>
+
+  <div style="position:absolute; left:38px; bottom:78px; z-index:4; display:flex; align-items:baseline; gap:12px;">
+    <span data-scene-num="" style="font-family:'Cormorant Garamond',serif; font-size:22px; color:#c8a24a; transition:opacity .4s ease;">I</span>
+    <span data-scene-name="" style="font-size:12px; letter-spacing:0.34em; text-transform:uppercase; color:#d8cfbf; transition:opacity .4s ease;">Le rêve</span>
+  </div>
+
+  <div style="position:absolute; right:38px; bottom:82px; z-index:4; display:flex; flex-direction:column; align-items:center; gap:10px; pointer-events:none;">
+    <span style="font-size:9px; letter-spacing:0.4em; text-transform:uppercase; color:#cdc3b3;">Défiler</span>
+    <span style="width:1px; height:34px; background:linear-gradient(#c8a24a,rgba(200,162,74,0)); animation:bob 2.6s ease-in-out infinite;"></span>
+  </div>
+
+  <div data-caption="" style="position:absolute; left:50%; top:60%; transform:translateX(-50%); width:min(880px,86vw); text-align:center; z-index:4; opacity:0; transition:opacity .6s ease; font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:300; font-size:clamp(22px,3.4vw,40px); line-height:1.4; color:#f3ecdf; text-shadow:0 2px 30px rgba(0,0,0,0.6);"></div>
+
+  <div data-endcard="" style="position:absolute; inset:0; z-index:6; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; opacity:0; transition:opacity .8s ease; pointer-events:none; background:rgba(0,0,0,0.4);">
+    <img src="assets/logo.png" alt="IYYA Patrimoine" style="width:min(300px,56vw); height:auto; margin-bottom:34px; filter:brightness(0) invert(1);">
+    <p style="font-family:'Cormorant Garamond',serif; font-style:italic; font-weight:300; font-size:clamp(24px,3.6vw,42px); line-height:1.4; margin:0 auto 28px; max-width:20ch; color:#f3ecdf;">Créer des lieux où les générations écrivent leur histoire.</p>
+    <p style="font-size:12px; letter-spacing:0.42em; text-transform:uppercase; color:#c8a24a; margin:0 0 36px;">Votre patrimoine commence ici</p>
+    <div style="display:flex; gap:14px; flex-wrap:wrap; justify-content:center;">
+      <a href="#biens" style="display:inline-flex; padding:14px 32px; background:#b08d1e; border-radius:2px; font-size:12px; letter-spacing:0.26em; text-transform:uppercase; color:#fff; text-decoration:none;">Découvrir nos biens</a>
+      <a onclick="{{ openBrief }}" style="display:inline-flex; padding:14px 32px; border:1px solid rgba(236,229,216,0.5); border-radius:2px; font-size:12px; letter-spacing:0.26em; text-transform:uppercase; color:#f3ecdf; text-decoration:none; cursor:pointer;">Je recherche un bien</a>
+    </div>
+  </div>
+
+  <div data-intro="" style="position:absolute; inset:0; z-index:7; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; background:rgba(0,0,0,0.5); transition:opacity .7s ease; padding:0 20px;">
+    <img src="assets/logo.png" alt="IYYA Patrimoine" style="width:min(280px,54vw); height:auto; margin-bottom:24px; filter:brightness(0) invert(1);">
+    <div style="font-size:11px; letter-spacing:0.5em; text-transform:uppercase; color:#c8a24a; margin-bottom:22px;">France · Côte d'Ivoire</div>
+    <h1 style="font-family:'Cormorant Garamond',serif; font-weight:300; font-style:italic; font-size:clamp(30px,5.4vw,62px); line-height:1.12; margin:0 0 34px; max-width:16ch; color:#f3ecdf;">Bien plus qu'une maison… <span style="font-style:normal;">un héritage.</span></h1>
+    <button data-playbtn="" onclick="{{ togglePlay }}" style="display:flex; align-items:center; justify-content:center; width:74px; height:74px; border-radius:50%; border:1px solid rgba(200,162,74,0.6); background:rgba(200,162,74,0.12); color:#f3ecdf; cursor:pointer; animation:pulseRing 2.6s ease-out infinite; margin-bottom:30px;">
+      <span style="display:block; width:0; height:0; border-top:11px solid transparent; border-bottom:11px solid transparent; border-left:18px solid #f3ecdf; margin-left:4px;"></span>
+    </button>
+    <div style="display:flex; gap:14px; flex-wrap:wrap; justify-content:center;">
+      <a onclick="{{ openBrief }}" style="display:inline-flex; padding:13px 30px; background:#b08d1e; border-radius:2px; font-size:11.5px; letter-spacing:0.22em; text-transform:uppercase; color:#fff; text-decoration:none; cursor:pointer;">Je recherche un bien</a>
+      <a href="https://calendly.com/iyya-patrimoine/decouverte-30min" target="_blank" style="display:inline-flex; padding:13px 30px; border:1px solid rgba(236,229,216,0.5); border-radius:2px; font-size:11.5px; letter-spacing:0.22em; text-transform:uppercase; color:#f3ecdf; text-decoration:none;">Découverte en 30 min</a>
+    </div>
+  </div>
+
+  <div style="position:absolute; left:0; right:0; bottom:0; z-index:5; padding:0 34px 22px; display:flex; align-items:center; gap:18px;">
+    <button data-toggle="" onclick="{{ togglePlay }}" title="Lecture / Pause" style="flex:none; width:40px; height:40px; border-radius:50%; border:1px solid rgba(236,229,216,0.28); background:rgba(0,0,0,0.25); color:#ece5d8; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:13px;">
+      <span data-toggle-icon="">❚❚</span>
+    </button>
+    <button onclick="{{ replay }}" title="Revoir" style="flex:none; width:40px; height:40px; border-radius:50%; border:1px solid rgba(236,229,216,0.28); background:rgba(0,0,0,0.25); color:#ece5d8; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:15px;">↺</button>
+    <span data-time="" style="flex:none; font-size:12px; letter-spacing:0.12em; color:#cdc3b3; min-width:82px;">0:00 / 1:00</span>
+    <div style="flex:1; position:relative; display:flex; align-items:center;">
+      <div style="position:absolute; left:0; right:0; height:2px; background:rgba(236,229,216,0.2); border-radius:2px;"></div>
+      <div data-progress="" style="position:absolute; left:0; height:2px; width:0%; background:#c8a24a; border-radius:2px;"></div>
+      <input data-scrub="" class="iyya-scrub" type="range" min="0" max="60" step="0.05" value="0" oninput="{{ onSeek }}" onchange="{{ onSeekEnd }}" style="position:relative; width:100%;">
+    </div>
+  </div>
+</div>
+
+<div class="search">
+  <div class="cell"><label>Transaction</label>
+    <select><option>Vente & Location</option><option>Vente</option><option>Location</option></select></div>
+  <div class="cell"><label>Type de bien</label>
+    <select><option>Tous types</option><option>Appartement</option><option>Maison</option><option>Villa</option><option>Immeuble</option><option>Immeuble de rapport</option><option>Terrain</option><option>Local commercial</option><option>Locaux d'activité</option><option>Bureau</option></select></div>
+  <div class="cell"><label>Localisation</label>
+    <select><option>France & Côte d'Ivoire</option><option>Abidjan — Cocody</option><option>Abidjan — Marcory</option><option>Bingerville</option><option>France</option><option>Côte d'Ivoire</option><option>Bénin</option><option>Togo</option><option>Guinée</option><option>Niger</option><option>Mali</option><option>Burkina Faso</option><option>Sénégal</option></select></div>
+  <div class="cell"><label>Budget</label>
+    <div style="display:flex;gap:12px;align-items:center">
+      <input type="text" placeholder="Min €" style="width:50%">
+      <span style="color:var(--line)">—</span>
+      <input type="text" placeholder="Max €" style="width:50%">
+    </div>
+  </div>
+  <div class="cell go"><a class="btn btn-navy" href="#contact">Rechercher</a></div>
+</div>
+
+<section id="biens">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="over">Sélection</div>
+      <h2>Propriétés à la une</h2>
+      <p>Un aperçu de nos biens et programmes. Notre force : les opportunités hors marché.</p>
+    </div>
+    <div ref="{{ bindBiens }}">
+      <div class="biens-toolbar">
+        <div class="fld">
+          <label>Trier par</label>
+          <select data-f="sort" onChange="{{ onBiensChange }}">
+            <option value="">Pertinence</option>
+            <option value="prix-desc">Prix décroissant</option>
+            <option value="prix-asc">Prix croissant</option>
+          </select>
+        </div>
+        <div class="fld">
+          <label>Secteur</label>
+          <select data-f="secteur" onChange="{{ onBiensChange }}">
+            <option value="">Tous les secteurs</option>
+            <optgroup label="Côte d'Ivoire">
+              <option value="pays:Côte d'Ivoire">Toute la Côte d'Ivoire</option>
+              <option>Cocody</option>
+              <option>Riviera</option>
+              <option>Bingerville</option>
+              <option>Marcory</option>
+            </optgroup>
+            <optgroup label="France">
+              <option value="pays:France">Toute la France</option>
+              <option>Paris</option>
+              <option>Aix-en-Provence</option>
+            </optgroup>
+            <optgroup label="Autres pays">
+              <option value="pays:Bénin">Bénin</option>
+              <option value="pays:Togo">Togo</option>
+              <option value="pays:Guinée">Guinée</option>
+              <option value="pays:Niger">Niger</option>
+              <option value="pays:Mali">Mali</option>
+              <option value="pays:Burkina Faso">Burkina Faso</option>
+              <option value="pays:Sénégal">Sénégal</option>
+            </optgroup>
+          </select>
+        </div>
+        <div class="fld">
+          <label>Quartier</label>
+          <select data-f="quartier" onChange="{{ onBiensChange }}">
+            <option value="">Tous les quartiers</option>
+            <optgroup label="Côte d'Ivoire">
+              <option>Riviera Golf</option>
+              <option>Angré</option>
+              <option>Riviera 3</option>
+              <option>Cité</option>
+              <option>Zone 4</option>
+              <option>Biétry</option>
+            </optgroup>
+            <optgroup label="France">
+              <option>16e arrondissement</option>
+              <option>Centre-ville</option>
+            </optgroup>
+          </select>
+        </div>
+        <div class="fld">
+          <label>Type de bien</label>
+          <select data-f="type" onChange="{{ onBiensChange }}">
+            <option value="">Tous les types</option>
+            <option>Villa</option>
+            <option>Appartement</option>
+            <option>Maison</option>
+            <option>Programme neuf</option>
+            <option>Immeuble</option>
+            <option>Locaux d'activité</option>
+            <option>Bureau</option>
+          </select>
+        </div>
+        <div class="fld">
+          <label>Prestation</label>
+          <select data-f="feature" onChange="{{ onBiensChange }}">
+            <option value="">Toutes prestations</option>
+            <option>Piscine</option>
+            <option>Jardin</option>
+            <option>Terrasse</option>
+            <option>Résidence sécurisée</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="props" data-grid="">
+        <sc-for list="{{ featured }}" as="b" hint-placeholder-count="6">
+          <div class="card" onClick="{{ b.open }}" style="cursor:pointer" data-pays="{{ b.pays }}" data-secteur="{{ b.secteur }}" data-quartier="{{ b.quartier }}" data-type="{{ b.type }}" data-price="{{ b.price }}" data-surface="{{ b.surface }}" data-features="{{ b.featuresStr }}">
+            <div class="ph">
+              <div style="{{ b.phStyle }}"></div>
+              <sc-if value="{{ b.hasTag }}" hint-placeholder-val="{{ false }}"><span class="tag">{{ b.tag }}</span></sc-if>
+            </div>
+            <div class="body">
+              <h3>{{ b.title }}</h3>
+              <div class="loc">{{ b.loc }}</div>
+              <div class="price">{{ b.priceText }}</div>
+              <div class="specs">
+                <sc-if value="{{ b.pieces }}" hint-placeholder-val="{{ false }}"><span>{{ b.pieces }} pièces</span></sc-if>
+                <sc-if value="{{ b.surface }}" hint-placeholder-val="{{ false }}"><span>{{ b.surface }} m²</span></sc-if>
+                <sc-if value="{{ b.feat1 }}" hint-placeholder-val="{{ false }}"><span>{{ b.feat1 }}</span></sc-if>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div class="biens-empty" data-empty="" style="display:none">Aucun bien ne correspond à ces critères — ajustez votre recherche ou contactez-nous.</div>
+    </div>
+  </div>
+</section>
+
+<section class="gray" id="services">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="over">Un interlocuteur unique</div>
+      <h2>Nos services</h2>
+      <p>De la recherche du bien jusqu'à son arbitrage : six métiers réunis pour construire, exploiter et transmettre votre patrimoine.</p>
+    </div>
+    <div class="serv">
+      <div class="sv"><div class="n">01</div><h3>Chasseur de biens</h3><p>Sourcing ciblé et hors marché, vérifications foncières complètes, négociation et sécurisation notariale — honoraires uniquement au succès.</p></div>
+      <div class="sv"><div class="n">02</div><h3>Location & gestion</h3><p>Mise en location au juste loyer, sélection rigoureuse des locataires, encaissements et suivi quotidien de vos biens.</p></div>
+      <div class="sv"><div class="n">03</div><h3>Property management</h3><p>Pilotage patrimonial complet : budgets, reporting régulier, relations banque et expert-comptable.</p></div>
+      <div class="sv"><div class="n">04</div><h3>Facility management</h3><p>Gestion technique des bâtiments : maintenance, gardiennage, prestataires — des immeubles qui gardent leur valeur.</p></div>
+      <div class="sv"><div class="n">05</div><h3>Valorisation & décoration</h3><p>De la rénovation à l'architecture intérieure avec nos décorateurs partenaires : le standing qui justifie le loyer supérieur.</p></div>
+      <div class="sv"><div class="n">06</div><h3>Arbitrage des actifs</h3><p>Vendre au bon moment, au bon prix : cessions aux promoteurs, montages en dation, réemploi dans votre prochaine acquisition.</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="band" id="fonciere">
+  <div class="wrap grid">
+    <div>
+      <div class="over">Investir autrement</div>
+      <h2>Créez votre foncière immobilière</h2>
+      <p>Le véhicule discret des grands patrimoines : une société qui achète avec l'appui de la banque, se rembourse par les loyers et se transmet sans se déchirer.</p>
+      <p>Vous héritez de terrains ou de biens en indivision ? Nous structurons, titrons et valorisons les patrimoines familiaux — de l'audit au plan d'action.</p>
+      <p style="margin-bottom:26px">Recevez gratuitement notre guide de l'investisseur : envoyez simplement « BOOK » sur WhatsApp.</p>
+      <a class="btn btn-gold" href="https://wa.me/33662230261?text=BOOK">Recevoir le guide gratuit</a>
+    </div>
+    <div class="ph"><img src="assets/10-soir-lanternes.jpg" alt="Villa au crépuscule"></div>
+  </div>
+</div>
+
+<section id="apropos">
+  <div class="wrap about">
+    <div class="ph"><img src="assets/04-salon-jour.jpg" alt="Intérieur design"></div>
+    <div>
+      <div class="over" style="letter-spacing:5px;font-size:11.5px;text-transform:uppercase;color:var(--gold)">Qui nous sommes</div>
+      <h2>Une agence, deux continents</h2>
+      <p>IYYA Patrimoine est une agence immobilière établie en France, dont la filiale ivoirienne installée avec agrément déploie à Abidjan l'ensemble de nos services.</p>
+      <p>La collaboration avec plusieurs partenaires français et étrangers nous permet de placer le client au centre de nos préoccupations et de lui fournir un service sur mesure : artisans, architectes, décorateurs, notaires, avocats d'affaires, banquiers, promoteurs, marchands de biens…</p>
+      <p>Les standards et la rigueur d'une agence française, l'exécution et la connaissance du terrain à Abidjan.</p>
+      <div class="values"><div>Sur mesure</div><div>Transparence</div><div>Interlocuteur unique</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="gray" id="actualites">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="over">Le regard IYYA</div>
+      <h2>Actualités & conseils</h2>
+      <p>Marchés, fiscalité, stratégies patrimoniales : nos analyses pour investir en connaissance de cause.</p>
+    </div>
+    <div class="props">
+      <div class="card">
+        <div class="ph"><img src="assets/02-villa-jour.jpg" alt="Investir en Côte d'Ivoire"><span class="tag">Guide</span></div>
+        <div class="body">
+          <h3>Pourquoi Abidjan attire les investisseurs en 2026</h3>
+          <div class="loc">Marché · Côte d'Ivoire</div>
+          <p style="font-size:14px;color:var(--muted)">Déficit de 400 000 logements, métro en construction, rendements à deux chiffres : les fondamentaux du marché ivoirien.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ph"><img src="assets/10-soir-lanternes.jpg" alt="Foncière familiale"><span class="tag">Stratégie</span></div>
+        <div class="body">
+          <h3>Patrimoine hérité : sortir de l'indivision par la foncière</h3>
+          <div class="loc">Structuration</div>
+          <p style="font-size:14px;color:var(--muted)">Des terrains en indivision entre héritiers ? Comment la foncière familiale débloque, titre et valorise le patrimoine.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ph"><img src="assets/04-salon-jour.jpg" alt="Valorisation"><span class="tag">Conseil</span></div>
+        <div class="body">
+          <h3>Rénover et décorer : le standing qui justifie le loyer</h3>
+          <div class="loc">Valorisation</div>
+          <p style="font-size:14px;color:var(--muted)">De la rénovation à l'architecture intérieure : comment quelques choix bien pensés augmentent durablement vos revenus locatifs.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="fgrid">
+      <div class="flogo">
+        <svg viewBox="50 5 295 175" xmlns="http://www.w3.org/2000/svg"><g stroke="#ffffff" stroke-width="6" fill="none">
+        <line x1="64" y1="90" x2="64" y2="170"></line><line x1="72" y1="18" x2="118" y2="90"></line><line x1="118" y1="90" x2="169" y2="18"></line>
+        <line x1="118" y1="90" x2="118" y2="164"></line><line x1="115" y1="164" x2="172" y2="164"></line><line x1="169" y1="18" x2="212" y2="90"></line>
+        <line x1="212" y1="90" x2="267" y2="18"></line><line x1="212" y1="90" x2="172" y2="164"></line><line x1="274" y1="90" x2="222" y2="170"></line>
+        <line x1="274" y1="90" x2="327" y2="170"></line><line x1="218" y1="170" x2="331" y2="170"></line></g></svg>
+        <p>IYYA Patrimoine accompagne investisseurs et familles dans la constitution, la gestion et la transmission de leur patrimoine immobilier, en France et en Afrique subsaharienne.</p>
+      </div>
+      <div>
+        <h4>Navigation</h4>
+        <p><a href="#biens">Propriétés</a></p>
+        <p><a href="#services">Nos services</a></p>
+        <p><a href="#fonciere">Créer sa foncière</a></p>
+        <p><a href="#apropos">Qui nous sommes</a></p>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <p>WhatsApp : <a href="https://wa.me/33662230261">+33 6 62 23 02 61</a></p>
+        <p>Email : <a href="mailto:contactiyya@gmail.com">contactiyya@gmail.com</a></p>
+        <p style="margin-top:14px">Entretien de cadrage sans engagement —<br>mentionnez le mot « FONCIÈRE ».</p>
+        <form onSubmit="{{ submitFicheContact }}" style="margin-top:22px;padding-top:20px;border-top:1px solid #2a3345">
+          <div style="font-size:12.5px;letter-spacing:1.5px;text-transform:uppercase;color:#fff;margin-bottom:12px">Me recontacter</div>
+          <input name="nom" placeholder="Nom et prénom" style="width:100%;background:rgba(255,255,255,.06);border:1px solid #2a3345;color:#fff;padding:10px 12px;font-family:'Jost',sans-serif;font-size:13.5px;outline:none;margin-bottom:10px">
+          <input name="tel" placeholder="Téléphone" style="width:100%;background:rgba(255,255,255,.06);border:1px solid #2a3345;color:#fff;padding:10px 12px;font-family:'Jost',sans-serif;font-size:13.5px;outline:none;margin-bottom:10px">
+          <input name="email" type="email" placeholder="Email" style="width:100%;background:rgba(255,255,255,.06);border:1px solid #2a3345;color:#fff;padding:10px 12px;font-family:'Jost',sans-serif;font-size:13.5px;outline:none;margin-bottom:12px">
+          <button type="submit" style="width:100%;background:#b08d1e;color:#fff;border:none;padding:11px;font-family:'Jost',sans-serif;font-size:11.5px;letter-spacing:2px;text-transform:uppercase;cursor:pointer">Nous contacter</button>
+        </form>
+        <p style="margin-top:16px">Suivez-nous</p>
+        <div style="display:flex;gap:12px;margin-top:10px">
+          <a href="https://www.linkedin.com/company/10352233/" target="_blank" aria-label="LinkedIn IYYA Patrimoine" style="width:36px;height:36px;border:1px solid #2a3345;display:flex;align-items:center;justify-content:center;transition:.25s" title="IYYA Patrimoine sur LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="#aeb6c4"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM10 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.4c0-1.29-.02-2.95-1.8-2.95-1.8 0-2.08 1.4-2.08 2.85V21h-4z"/></svg></a>
+          <a href="https://www.linkedin.com/in/agn%C3%A8s-kouamenan-01a87352/" target="_blank" aria-label="LinkedIn Agnès Kouamenan" style="width:36px;height:36px;border:1px solid #2a3345;display:flex;align-items:center;justify-content:center;transition:.25s" title="Agnès Kouamenan sur LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="#aeb6c4"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM10 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.4c0-1.29-.02-2.95-1.8-2.95-1.8 0-2.08 1.4-2.08 2.85V21h-4z"/></svg></a>
+          <a href="https://www.facebook.com/iyya.patrimoine" target="_blank" aria-label="Facebook" style="width:36px;height:36px;border:1px solid #2a3345;display:flex;align-items:center;justify-content:center;transition:.25s" title="Facebook"><svg width="16" height="16" viewBox="0 0 24 24" fill="#aeb6c4"><path d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.53-1.5H17V3.6c-.28-.04-1.24-.12-2.36-.12-2.33 0-3.93 1.42-3.93 4.04v2.26H8v3.1h2.7V21z"/></svg></a>
+          <a href="https://www.instagram.com/patrimoineiyya/" target="_blank" aria-label="Instagram" style="width:36px;height:36px;border:1px solid #2a3345;display:flex;align-items:center;justify-content:center;transition:.25s" title="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#aeb6c4" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1" fill="#aeb6c4" stroke="none"/></svg></a>
+          <a href="https://youtu.be/2LzzEdbb2Xo" target="_blank" aria-label="YouTube" style="width:36px;height:36px;border:1px solid #2a3345;display:flex;align-items:center;justify-content:center;transition:.25s" title="YouTube"><svg width="16" height="16" viewBox="0 0 24 24" fill="#aeb6c4"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.5v-7l6.3 3.5-6.3 3.5z"/></svg></a>
+        </div>
+      </div>
+    </div>
+    <div class="fbottom">© 2026 IYYA PATRIMOINE® — marque déposée à l'INPI · Tous droits réservés · <a href="Mentions legales.dc.html" style="color:inherit">Mentions légales</a> · <a href="Administration des biens.dc.html" style="color:#c9a35c;text-decoration:underline;text-underline-offset:2px">Espace administration</a></div>
+  </div>
+</footer>
+
+<a class="wa" href="https://wa.me/33662230261?text=BOOK" aria-label="WhatsApp">✆</a>
+
+<div class="modal {{ modalCls }}" onClick="{{ onBackdrop }}">
+  <div class="mbox">
+    <button class="mclose" onclick="{{ closeBrief }}">✕</button>
+    <h3>Je recherche un bien</h3>
+    <div class="msub2">Décrivez votre recherche en une minute — nous revenons vers vous sous 24 h avec une première sélection.</div>
+    <form onSubmit="{{ submitBrief }}">
+      <div class="mrow">
+        <div><label>Type de bien</label>
+          <select name="type"><option>Appartement</option><option>Maison — Villa</option><option>Immeuble de rapport</option><option>Terrain</option><option>Local commercial</option></select></div>
+        <div><label>Ancien / Neuf</label>
+          <select name="etat"><option>Indifférent</option><option>Ancien</option><option>Neuf / VEFA</option></select></div>
+      </div>
+      <label>Localisation souhaitée</label>
+      <select name="lieu"><option value="">Indifférent</option><option>France</option><option>Côte d'Ivoire</option><option>Abidjan — Cocody</option><option>Abidjan — Marcory</option><option>Bingerville</option><option>Bénin</option><option>Togo</option><option>Guinée</option><option>Niger</option><option>Mali</option><option>Burkina Faso</option><option>Sénégal</option></select>
+      <div class="mrow">
+        <div><label>Budget min</label><input name="bmin" placeholder="€ / FCFA"></div>
+        <div><label>Budget max</label><input name="bmax" placeholder="€ / FCFA"></div>
+      </div>
+      <div class="mrow">
+        <div><label>Pièces</label>
+          <select name="pieces"><option>Indifférent</option><option>1-2</option><option>3-4</option><option>5 et plus</option></select></div>
+        <div><label>Objectif</label>
+          <select name="objectif"><option>Habiter</option><option>Investir — louer</option><option>Créer une foncière</option><option>Résidence secondaire</option></select></div>
+      </div>
+      <label>Précisions (optionnel)</label>
+      <textarea name="detail" rows="2" placeholder="Piscine, étage, quartier précis, échéance…"></textarea>
+      <label>Votre nom</label>
+      <input name="nom" placeholder="Nom et prénom">
+      <button type="submit" class="btn btn-gold">Envoyer ma recherche sur WhatsApp</button>
+    </form>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:&quot;100%&quot;},&quot;autostart&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Film&quot;},&quot;loopFilm&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Film&quot;}}">
+class Component extends DCLogic {
+  constructor(props){
+    super(props);
+    this.state = { modalOpen:false, menuOpen:false, biens:[] };
+    this.cmod = null;
+    import('./contacts-data.js').then(m=>{ this.cmod = m; }).catch(()=>{});
+    import('./biens-data.js').then(async m=>{ const list = await m.loadBiens(); this.setState({ biens:list }); }).catch(()=>{});
+    this.DUR = 60;
+    this.t = 0;
+    this.playing = false;
+    this.seeking = false;
+    this.videoPlaying = false;
+    this.curLabel = null;
+    this.timing = [
+      {s:0,    d:8,   k:'zi'},
+      {s:8,    d:4.5, k:'il'},
+      {s:12.5, d:4,   k:'ir'},
+      {s:16.5, d:8.5, k:'ic'},
+      {s:25,   d:4.5, k:'or'},
+      {s:29.5, d:4,   k:'il'},
+      {s:33.5, d:4.5, k:'ic'},
+      {s:38,   d:5.5, k:'or'},
+      {s:43.5, d:4.5, k:'ol'},
+      {s:48,   d:4,   k:'ic'},
+      {s:52,   d:4,   k:'ir'},
+      {s:56,   d:4,   k:'ic'}
+    ];
+    this.captions = [
+      {a:3.6,  b:8,    t:'\u00ab Certaines maisons sont belles\u2026 \u00bb'},
+      {a:18.5, b:25,   t:"\u00ab \u2026mais les plus belles accueillent ceux que l'on aime. \u00bb"},
+      {a:39.5, b:47.5, t:'\u00ab Les plus beaux patrimoines ne se mesurent pas en m\u00e8tres carr\u00e9s\u2026 mais en souvenirs. \u00bb'}
+    ];
+    this.scenes = [
+      {s:0,    n:'I',   t:'Le r\u00eave'},
+      {s:8,    n:'II',  t:"L'arriv\u00e9e \u00b7 le jour"},
+      {s:16.5, n:'III', t:'Les retrouvailles'},
+      {s:25,   n:'IV',  t:'La maison prend vie \u00b7 en journ\u00e9e'},
+      {s:38,   n:'V',   t:'Le d\u00e9jeuner \u00b7 en journ\u00e9e'},
+      {s:48,   n:'VI',  t:'Le soir \u00b7 autour de la piscine'}
+    ];
+  }
+
+  _sendEmailNotif(data){
+    // Config EmailJS : remplissez ces 3 identifiants (emailjs.com) pour activer l'envoi automatique.
+    const EMAILJS_SERVICE_ID = 'service_e4smu7d';
+    const EMAILJS_TEMPLATE_ID = 'template_l9406se';
+    const EMAILJS_PUBLIC_KEY = 'Ti8rhxXDHSybhfSrr';
+    const subject = 'Nouveau contact site IYYA — ' + (data.type||'Contact');
+    const body = 'Nom : ' + (data.nom||'') + '\nTéléphone : ' + (data.tel||'') + '\nEmail : ' + (data.email||'') + (data.detail ? ('\n\n' + data.detail) : '');
+    if(EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID && EMAILJS_PUBLIC_KEY && typeof window!=='undefined'){
+      const send = ()=>{
+        if(!window.emailjs) return;
+        window.emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+          to_email: 'contactiyya@gmail.com', from_name: data.nom||'Visiteur site', reply_to: data.email||'',
+          subject, message: body, nom:data.nom||'', tel:data.tel||'', email:data.email||'', detail:data.detail||''
+        }, EMAILJS_PUBLIC_KEY).catch(()=>{});
+      };
+      if(window.emailjs){ send(); }
+      else {
+        const s = document.createElement('script');
+        s.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
+        s.onload = send;
+        document.head.appendChild(s);
+      }
+    } else if(typeof window!=='undefined') {
+      // Repli : ouvre le client mail de l'utilisateur avec le message pré-rempli.
+      window.open('mailto:contactiyya@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body), '_blank');
+    }
+  }
+
+  renderVals(){
+    return {
+      setLangFn: (typeof window!=='undefined' ? window.setSiteLang : function(){}),
+      langEnHref: (typeof window!=='undefined' ? 'https://translate.google.com/translate?sl=fr&tl=en&u='+encodeURIComponent(window.location.href) : '#'),
+      langEsHref: (typeof window!=='undefined' ? 'https://translate.google.com/translate?sl=fr&tl=es&u='+encodeURIComponent(window.location.href) : '#'),
+      langRuHref: (typeof window!=='undefined' ? 'https://translate.google.com/translate?sl=fr&tl=ru&u='+encodeURIComponent(window.location.href) : '#'),
+      langZhHref: (typeof window!=='undefined' ? 'https://translate.google.com/translate?sl=fr&tl=zh-CN&u='+encodeURIComponent(window.location.href) : '#'),
+      modalCls: this.state.modalOpen ? 'open' : '',
+      mmenuCls: this.state.menuOpen ? 'open' : '',
+      toggleMenu: ()=> this.setState(s=>({ menuOpen: !s.menuOpen })),
+      openBrief: (e)=>{ if(e && e.preventDefault) e.preventDefault(); this.setState({ modalOpen:true }); },
+      submitFicheContact: (e)=>{
+        e.preventDefault();
+        const f = new FormData(e.target);
+        const g = (k)=> (f.get(k)||'').toString().trim();
+        const msg = "FICHE CONTACT \u2014 Site IYYA%0A"
+          + "Nom : " + g('nom') + "%0A"
+          + "T\u00e9l : " + g('tel') + " \u2014 Email : " + g('email');
+        if(this.cmod){ this.cmod.addContact({ id:'k'+Date.now().toString(36)+Math.random().toString(36).slice(2,7), date:new Date().toISOString(), type:'Fiche contact', nom:g('nom'), tel:g('tel'), email:g('email'), detail:'' }); }
+        this._sendEmailNotif({ type:'Fiche contact', nom:g('nom'), tel:g('tel'), email:g('email'), detail:'' });
+        window.open("https://wa.me/33662230261?text=" + msg, "_blank");
+        e.target.reset();
+      },
+      closeBrief: ()=> this.setState({ modalOpen:false }),
+      onBackdrop: (e)=>{ if(e.target === e.currentTarget) this.setState({ modalOpen:false }); },
+      submitBrief: (e)=>{
+        e.preventDefault();
+        const f = new FormData(e.target);
+        const g = (k)=> f.get(k) || '';
+        const msg = "RECHERCHE DE BIEN \u2014 " + g('nom') + "%0A"
+          + "Type : " + g('type') + " (" + g('etat') + ")%0A"
+          + "Lieu : " + g('lieu') + "%0A"
+          + "Budget : " + g('bmin') + " \u2013 " + g('bmax') + "%0A"
+          + "Pi\u00e8ces : " + g('pieces') + " \u2014 Objectif : " + g('objectif') + "%0A"
+          + "Pr\u00e9cisions : " + g('detail');
+        const detailTxt = 'Type : '+g('type')+' ('+g('etat')+') — Lieu : '+g('lieu')+' — Budget : '+g('bmin')+'-'+g('bmax')+' — Pi\u00e8ces : '+g('pieces')+' — Objectif : '+g('objectif')+' — '+g('detail');
+        if(this.cmod){ this.cmod.addContact({ id:'k'+Date.now().toString(36)+Math.random().toString(36).slice(2,7), date:new Date().toISOString(), type:'Recherche de bien', nom:String(g('nom')||''), tel:'', email:'', detail: detailTxt }); }
+        this._sendEmailNotif({ type:'Recherche de bien', nom:String(g('nom')||''), tel:'', email:'', detail: detailTxt });
+        window.open("https://wa.me/33662230261?text=" + msg, "_blank");
+      },
+      bindBiens: (el)=>{ if(el && el!==this.biensWrap){ this.biensWrap = el; } },
+      onBiensChange: ()=> this._applyBiens(),
+      featured: (this.state.biens||[]).slice(0,9).map(b=>({
+        pays: b.pays||'', secteur: b.secteur||'', quartier: b.quartier||'', type: b.type||'',
+        price: String(parseInt(String(b.price||'').replace(/[^\d]/g,''),10)||0),
+        surface: b.surface || (b.surfaceTerrain ? b.surfaceTerrain : ''), featuresStr: (b.features||[]).join('|'),
+        hasTag: !!b.tag, tag: b.tag||'',
+        phStyle: { width:'100%', height:'100%', backgroundSize:'cover', backgroundPosition:'center', backgroundImage: 'url("'+((b.photos&&b.photos[0])||'assets/02-villa-jour.jpg')+'")' },
+        title: b.title||'', loc: [b.secteur,b.pays].filter(Boolean).join(' — '),
+        priceText: b.priceText||'', pieces: b.pieces||'',
+        feat1: (b.features&&b.features[0])||'',
+        open: ()=>{ if(typeof window!=='undefined') window.location.href='Nos biens.dc.html'; }
+      })),
+      bindRoot: (el)=>{ if(el && el!==this.root){ this.root = el; this._cache(); } },
+      togglePlay: ()=> this.playing ? this.pause() : this.play(),
+      replay: ()=>{ this.t = 0; this._syncVideo(true); this.play(); },
+      onSeek: (e)=>{ this.seeking = true; this.t = Math.min(this.DUR, Math.max(0, parseFloat(e.target.value)||0)); this._syncVideo(true); this.frame(); },
+      onSeekEnd: ()=>{ this.seeking = false; }
+    };
+  }
+
+  _cache(){
+    const r = this.root;
+    this.layers = Array.from(r.querySelectorAll('[data-shot]'));
+    this.kb = this.layers.map(l => l.querySelector('[data-kb]'));
+    this.video = r.querySelector('video[data-kb]');
+    this.capEl = r.querySelector('[data-caption]');
+    this.endEl = r.querySelector('[data-endcard]');
+    this.introEl = r.querySelector('[data-intro]');
+    this.sceneNum = r.querySelector('[data-scene-num]');
+    this.sceneName = r.querySelector('[data-scene-name]');
+    this.progEl = r.querySelector('[data-progress]');
+    this.timeEl = r.querySelector('[data-time]');
+    this.scrub = r.querySelector('[data-scrub]');
+    this.toggleIcon = r.querySelector('[data-toggle-icon]');
+    this.frame();
+    const auto = this.props.autostart !== false;
+    if(auto){ setTimeout(()=> this.play(), 350); }
+  }
+
+  componentWillUnmount(){ if(this.raf) cancelAnimationFrame(this.raf); }
+
+  _applyBiens(){
+    const w = this.biensWrap;
+    if(!w) return;
+    const val = (f)=>{ const el = w.querySelector('[data-f="'+f+'"]'); return el ? el.value : ''; };
+    const sort = val('sort'), secteur = val('secteur'), type = val('type'), feature = val('feature'), quartier = val('quartier');
+    const grid = w.querySelector('[data-grid]');
+    const empty = w.querySelector('[data-empty]');
+    if(!grid) return;
+    const cards = Array.from(grid.querySelectorAll('.card'));
+    const visible = [];
+    cards.forEach(c=>{
+      const feats = (c.dataset.features || '').split('|');
+      let okSect = true;
+      if(secteur){
+        okSect = secteur.indexOf('pays:') === 0
+          ? c.dataset.pays === secteur.slice(5)
+          : c.dataset.secteur === secteur;
+      }
+      const ok = okSect
+        && (!type || c.dataset.type === type)
+        && (!feature || feats.indexOf(feature) !== -1)
+        && (!quartier || c.dataset.quartier === quartier);
+      c.style.display = ok ? '' : 'none';
+      if(ok) visible.push(c);
+    });
+    if(sort){
+      visible.sort((a,b)=>{
+        if(sort === 'prix-desc') return (+b.dataset.price) - (+a.dataset.price);
+        if(sort === 'prix-asc')  return (+a.dataset.price) - (+b.dataset.price);
+        if(sort === 'surface-desc') return (+b.dataset.surface) - (+a.dataset.surface);
+        return 0;
+      });
+      visible.forEach(c=> grid.appendChild(c));
+    }
+    if(empty) empty.style.display = visible.length ? 'none' : 'block';
+  }
+
+  play(){
+    if(!this.root) return;
+    if(this.t >= this.DUR) this.t = 0;
+    this.playing = true;
+    if(this.toggleIcon) this.toggleIcon.textContent = '\u275a\u275a';
+    if(this.introEl){ this.introEl.style.opacity = '0'; this.introEl.style.pointerEvents = 'none'; }
+    this._syncVideo();
+    this.last = performance.now();
+    if(this.raf) cancelAnimationFrame(this.raf);
+    this.raf = requestAnimationFrame((t)=> this.tick(t));
+  }
+
+  pause(){
+    this.playing = false;
+    if(this.toggleIcon) this.toggleIcon.textContent = '\u25b6';
+    if(this.raf) cancelAnimationFrame(this.raf);
+    if(this.video) this.video.pause();
+    this.videoPlaying = false;
+  }
+
+  tick(now){
+    const dt = Math.min(0.05, (now - this.last)/1000);
+    this.last = now;
+    if(this.playing){
+      this.t += dt;
+      if(this.t >= this.DUR){
+        const loop = this.props.loopFilm !== false;
+        if(loop){ this.t = this.t % this.DUR; this._syncVideo(true); }
+        else { this.t = this.DUR; this.frame(); this.pause(); return; }
+      }
+    }
+    this.frame();
+    if(this.playing) this.raf = requestAnimationFrame((t)=> this.tick(t));
+  }
+
+  _syncVideo(reset){
+    if(!this.video) return;
+    if(reset){ try { this.video.currentTime = 0; } catch(e){} this.videoPlaying = false; }
+  }
+
+  _sm(x){ x = Math.max(0, Math.min(1, x)); return x*x*(3-2*x); }
+
+  _kbTransform(type, p){
+    let z, tx = 0, ty = 0;
+    const range = 0.15;
+    if(type === 'zi'){ z = 1.03 + p*0.10; }
+    else if(type[0] === 'i'){ z = 1.05 + p*range; }
+    else { z = 1.05 + range - p*range; }
+    const dir = type[1];
+    const amt = 3.6;
+    if(dir === 'l'){ tx = amt - p*2*amt; }
+    else if(dir === 'r'){ tx = -amt + p*2*amt; }
+    else { ty = -1.2 + p*2.4; }
+    return 'scale(' + z.toFixed(4) + ') translate(' + tx.toFixed(2) + '%,' + ty.toFixed(2) + '%)';
+  }
+
+  frame(){
+    const t = this.t, fade = 0.75;
+    for(let i=0;i<this.timing.length;i++){
+      const {s,d,k} = this.timing[i];
+      const e = s + d;
+      const inA = this._sm((t - (s - fade/2)) / fade);
+      const outA = this._sm(((e + fade/2) - t) / fade);
+      let op = Math.min(inA, outA);
+      if(i === 0){ op = Math.max(op, this._sm((t - (this.DUR - fade/2)) / fade)); }
+      const layer = this.layers[i];
+      if(!layer) continue;
+      layer.style.opacity = op.toFixed(3);
+      if(op > 0.004){
+        const p = Math.max(0, Math.min(1, (t - s)/d));
+        this.kb[i].style.transform = this._kbTransform(k, p);
+      }
+    }
+    if(this.video){
+      const inShot1 = t < 8.2;
+      if(this.playing && inShot1){
+        if(!this.videoPlaying){ const pr = this.video.play(); if(pr && pr.catch) pr.catch(()=>{}); this.videoPlaying = true; }
+      } else if(this.videoPlaying){ this.video.pause(); this.videoPlaying = false; }
+    }
+    let cap = '', capOp = 0;
+    for(const c of this.captions){
+      const o = Math.min(this._sm((t - c.a)/0.6), this._sm((c.b - t)/0.6));
+      if(o > capOp){ capOp = o; cap = c.t; }
+    }
+    const endFade = this._sm((t - 56.4)/1.4);
+    if(endFade > 0.02) capOp = 0;
+    if(this.capEl){
+      if(cap && this.capEl.textContent !== cap) this.capEl.textContent = cap;
+      this.capEl.style.opacity = capOp.toFixed(3);
+    }
+    let sc = this.scenes[0];
+    for(const s of this.scenes){ if(t >= s.s) sc = s; }
+    if(this.curLabel !== sc.n){
+      this.curLabel = sc.n;
+      if(this.sceneNum){ this.sceneNum.style.opacity = '0'; this.sceneName.style.opacity = '0';
+        setTimeout(()=>{ if(this.curLabel===sc.n){ this.sceneNum.textContent = sc.n; this.sceneName.textContent = sc.t; this.sceneNum.style.opacity='1'; this.sceneName.style.opacity='1'; } }, 220);
+      }
+    }
+    if(this.endEl){
+      const eo = this._sm((t - 56.4)/1.4);
+      this.endEl.style.opacity = eo.toFixed(3);
+      this.endEl.style.pointerEvents = eo > 0.5 ? 'auto' : 'none';
+      if(eo > 0.02){
+        const lblOp = (1 - Math.min(1, eo)).toFixed(3);
+        if(this.sceneNum) this.sceneNum.style.opacity = lblOp;
+        if(this.sceneName) this.sceneName.style.opacity = lblOp;
+      }
+    }
+    const frac = t / this.DUR;
+    if(this.progEl) this.progEl.style.width = (frac*100).toFixed(2) + '%';
+    if(this.scrub && !this.seeking) this.scrub.value = t;
+    if(this.timeEl) this.timeEl.textContent = this._fmt(t) + ' / 1:00';
+  }
+
+  _fmt(s){ s = Math.max(0, Math.floor(s)); const m = Math.floor(s/60); const r = s%60; return m + ':' + String(r).padStart(2,'0'); }
+}
+</script>
+</body>
+</html>
